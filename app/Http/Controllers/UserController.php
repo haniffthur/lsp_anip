@@ -36,4 +36,14 @@ public function destroy (string $id)
     $user->delete();
     return redirect()->route('user.index')->with('delete-data-success', 'Data berhasil dihapus');
 }
+
+public function update(Request $request, string $id)
+    {
+        $user = User::findOrFail($id);
+        $data = $request->all();
+
+        $user->update($data);
+
+        return redirect()->route('user.index')->with('update-data-success', 'Data berhasil diperbarui');
+    }
 }
