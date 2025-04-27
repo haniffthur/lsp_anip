@@ -28,4 +28,14 @@
             </div>
         </div>
     </div>
+    @if ($errors->any())
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops!',
+            html: `{!! implode('<br>', $errors->all()) !!}`,
+            confirmButtonText: 'OK'
+        });
+    </script>
+@endif
 @endsection

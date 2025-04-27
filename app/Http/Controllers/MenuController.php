@@ -40,12 +40,14 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
-        Menu::create([
-            'nama_menu' => $request->nama_menu,
-            'harga' => $request->harga
-        ]);
+      $validateData = $request->validate([
+        'nama_menu' => 'required|unique:menu,nama_menu',
+        'harga' => 'required|integer',
+      ]);
 
-        return redirect()->route('menu.index')->with('insert-data-success', 'Data baru berhasil ditambahkan');
+      Menu::create($validateData);
+
+        return redirect()->route('menu.index')->with('success', 'Menu Baru berhasil ditambahkan');
     }
 
     /**
