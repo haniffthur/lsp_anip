@@ -36,14 +36,41 @@ public function destroy (string $id)
     $user->delete();
     return redirect()->route('user.index')->with('delete-data-success', 'Data berhasil dihapus');
 }
+public function edit(string $id)
+{
+    $data = User::findOrFail($id);
+
+    return view('pages.user.edit', [
+        'data' => $data
+    ]);
+}
 
 public function update(Request $request, string $id)
-    {
-        $user = User::findOrFail($id);
-        $data = $request->all();
+{
+    $user = User::findOrFail($id);
 
-        $user->update($data);
+    // Validasi
+    $validated = $request->validate([
+        'username' => 'required|string|max:255',
+        'password' => 'nullable|string|min:6',
+        'role' => 'required|in:ADMIN,KASIR,WAITER,OWNER',
+    ]);
 
-        return redirect()->route('user.index')->with('update-data-success', 'Data berhasil diperbarui');
+    // Siapkan data update
+    $updateData = [
+        'username' => $validated['username'],
+        'role' => $validated['role'],
+    ];
+
+    // Kalau password diisi, hash dulu
+    if (!empty($validated['password'])) {
+        $updateData['password'] = bcrypt($validated['password']);
     }
+
+    // Update user
+    $user->update($updateData);
+
+    return redirect()->route('user.index')->with('update-data-success', 'Data berhasil diperbarui');
+}
+
 }

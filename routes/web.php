@@ -37,7 +37,7 @@ Route::middleware(['auth', 'isAdminOrWaiter'])->group(function () {
 
 Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::resource('/meja', MejaController::class);
-    Route::resource('/user',UserController::class);
+    Route::resource('user',UserController::class);
 
 });
 
